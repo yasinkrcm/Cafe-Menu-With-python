@@ -31,6 +31,17 @@ import sqlite3 as sql
 conn = sql.connect("Cafe.db")
 cursor = conn.cursor()
 
+class Coffee(): # standart coffee
+    def __init__(self):
+        pass
+    def espresso(): # differentiation by percentage of glass
+        water = 0.0
+        coffee = 0.8
+        return water , coffee
+    def americano():
+        Coffee.espresso 
+
+print(Coffee.espresso())
 while True:
     choice = input("""
       _ _ _ _ _ _ _ _ _ _
@@ -49,4 +60,6 @@ while True:
                    
 Please select an choise   : 
 """)
-    
+    if choice == -1 :
+        break
+    # if 
