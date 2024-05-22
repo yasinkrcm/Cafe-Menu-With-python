@@ -64,6 +64,7 @@ def insertCoffees():
     coffees  = [espresso,americano,iceAmericano,latte,iceLatte,cappucino,mocha]
     for coffee in coffees:
             coffee.insertDatabase()
+    print("Coffees insert to database successfully! ")
 
 # percentage representation of ingredients in coffees
 def coffeeIngredients():
