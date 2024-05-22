@@ -19,7 +19,6 @@ class Coffee():
         self.ice = ice
         
 # insert coffes in database
-
     def insertCoffees(self): 
         cursor.execute("""CREATE TABLE IF NOT EXISTS Coffees(
                     ID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -31,10 +30,9 @@ class Coffee():
                     MilkFoamRate INTEGER,
                     ChocolateRate INTEGER,
                     Ice BOOLEAN
-        )""")
-        for coffee in coffees:
-            cursor.execute("""INSERT INTO Coffees(CoffeeName,Price,CoffeeRate,WaterRate,MilkRate,MilkFoamRate,ChocolateRate,Ice) VALUES (?,?,?,?,?,?,?,?)""",
-                        (coffee.coffeeName,coffee.price,coffee.coffeeRate,coffee.water,coffee.milk,coffee.milk_foam,coffee.chocolate,coffee.ice))
+        )""")            
+        cursor.execute("""INSERT INTO Coffees(CoffeeName,Price,CoffeeRate,WaterRate,MilkRate,MilkFoamRate,ChocolateRate,Ice) VALUES (?,?,?,?,?,?,?,?)""",
+                (self.coffeeName,self.price,self.coffeeRate,self.water,self.milk,self.milk_foam,self.chocolate,self.ice))
         conn.commit()
 
     # percentage representation of ingredients in coffees
@@ -55,7 +53,37 @@ class Coffee():
     """)
             print("-" * 40)
 
+    # Return Coffee size and price for bill 
+    def cupSizeForPrice(self):
+        while True:
+            size = input(f"""
+            _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+            |                                     |
+            |Size For Cup                         |
+            |                                     |
+            |Tall (355ml)   : {self.price}        |
+            |                                     |
+            |Grande (473ml) : {self.price*1.15}   |
+            |                                     |
+            |Venti (591ml ) : {self.price*1.27}   |
+            |                                     |
+            |_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _|
+    """)
+            size = size.lower().strip().capitalize()
+            if size == "Tall":
+                return self.price
+            if size == "Grande":
+                self.price*1.15
+                return self.price
+            if size == "Venti":
+                self.price*1.27
+                return self.price
+            else:
+                print("Invalid size Please choice from table ")
+            
 
+    def billCoffee(self):
+        return self.price
 
 # coffee identification
 espresso = Coffee("Espresso",30,0.8)                            
