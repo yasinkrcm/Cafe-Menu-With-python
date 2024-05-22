@@ -57,3 +57,5 @@ Please select an choise   : """)
     if choice == "-1" :
         bill(result)
         break
+    else: 
+        print("Invalid Choise please select from menu")
