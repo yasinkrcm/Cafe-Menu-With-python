@@ -15,7 +15,6 @@ class Coffee():
         self.milk_foam = milkFoam
         self.chocolate = chocolate
         self.ice = ice
-        
 # create table and insert variable 
     def insertDatabase(self): 
         cursor.execute("""CREATE TABLE IF NOT EXISTS Coffees(
