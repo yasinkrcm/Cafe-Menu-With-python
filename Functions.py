@@ -1,62 +1,19 @@
-import sqlite3 as sql
-# sql connection and cursor identf
-conn = sql.connect("Cafe.db")
-cursor = conn.cursor()
-
-# coffee class identification (according to coffee ingredients)
-class Coffee(): 
-    __doc__  = "This Class created for coffe type"
-    def __init__(self,coffeeName,price,coffeeRate,water=0,milk = 0,milkFoam = 0,chocolate = 0,ice = 0 ):
-        self.coffeeName = coffeeName
-        self.price = price
-        self.coffeeRate = coffeeRate
-        self.water = water
-        self.milk = milk
-        self.milk_foam = milkFoam
-        self.chocolate = chocolate
-        self.ice = ice
-# create table and insert variable 
-    def insertDatabase(self): 
-        cursor.execute("""CREATE TABLE IF NOT EXISTS Coffees(
-                    ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                    CoffeeName TEXT,
-                    Price INTEGER,                
-                    CoffeeRate INTEGER,
-                    WaterRate INTEGER,
-                    MilkRate INTEGER,
-                    MilkFoamRate INTEGER,
-                    ChocolateRate INTEGER,
-                    Ice BOOLEAN
-        )""")            
-        cursor.execute("""INSERT INTO Coffees(CoffeeName,Price,CoffeeRate,WaterRate,MilkRate,MilkFoamRate,ChocolateRate,Ice) VALUES (?,?,?,?,?,?,?,?)""",
-                (self.coffeeName,self.price,self.coffeeRate,self.water,self.milk,self.milk_foam,self.chocolate,self.ice))
-        conn.commit()
+# - yeni müşteri seçimi ile başlasın.
+# - müşterin menüdeki kahvelerden birsini seçsin.
+# - başka bir şey eklemek ister mi sorsun.
+# - Sonra sipariş kapanınca fiyat hesaplasın ve ödeme yapıldı seçillsin.
+# - Sonrasında toplam yapılan satış bilgileri Satış tablosuna eklensin.
+# - ekranda yeni müşteri veya kasayı kapat şıkları çıksın. 
+# Program bu şekilde kendini tekrar etsin.
 
 
 
-    # Return Coffee size and price for bill 
-    def cupSizeForPrice(self):
-        while True:
-            size = input(f"""
-            Size For Cup                 
-            {"-"*28}                            
-            1- Tall (355ml)   : {self.price}
-                                        
-            2- Grande (473ml) : {self.price*1.15}
-                                              
-            3- Venti (591ml ) : {self.price*1.27}   
-            
-            Please choice for size : """)
-            if size == "1":
-                return self.price
-            if size == "2":
-                self.price*=1.15
-                return self.price
-            if size == "3":
-                self.price*=1.27
-                return self.price
-            else:
-                print("Invalid size Please choice from table ")
+
+
+
+# Main Menu And First Message
+
+
 
 # insert coffee in database       
 def insertCoffees():
@@ -64,6 +21,7 @@ def insertCoffees():
     for coffee in coffees:
             coffee.insertDatabase()
     print("Coffees insert to database successfully! ")
+
 
 # percentage representation of ingredients in coffees
 def coffeeIngredients():
@@ -82,27 +40,259 @@ def coffeeIngredients():
     ice  : {coffee[8] == True}
     """)
         print("-" * 40)
+    print("Returning to main menu...")
 
-# function to print bill on display
-def bill(result):
-    VAT = 18
-    print("-"*50)
-    print(f"""
-            Your Bill:      
-            {result}     
-            without VAT(Value-Added Tax ) : 
-            {result/(1+VAT/100)}    
-            """)
-    print("-"*50)
 
-# coffee identification
-espresso = Coffee("Espresso",30,0.8)                            
-americano = Coffee("Americano",35,0.3,0.7)                      
-iceAmericano = Coffee("Ice Americano",40,0.3,0.7,ice=1)       
-latte = Coffee("Latte",45,0.2,0,0.6,0.2)                        
-iceLatte = Coffee("Ice Latte",50,0.2,0,0.6,0.2,ice=1)             
-cappucino = Coffee("Cappucino",42,0.2,0,0.2,0.6)                
+import Functions
+import sqlite3 as sql
+
+
+# sql connection and cursor identf
+conn = sql.connect("Cafe.db")
+cursor = conn.cursor()
+
+# coffee class identification (according to coffee ingredients)
+class Coffee(): 
+    __doc__  = "This Class created for coffe type"
+    def __init__(self,coffeeName,price,coffeeRate,water=0,milk = 0,milkFoam = 0,chocolate = 0,ice = 0):
+        self.coffeeName = coffeeName
+        self.price = price
+        self.coffeeRate = coffeeRate
+        self.water = water
+        self.milk = milk
+        self.milk_foam = milkFoam
+        self.chocolate = chocolate
+        self.ice = ice
+
+    # create table and insert variable 
+    def insertDatabase(self): 
+        cursor.execute("""CREATE TABLE IF NOT EXISTS Coffees(
+                    ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                    CoffeeName TEXT,
+                    Price INTEGER,                
+                    CoffeeRate INTEGER,
+                    WaterRate INTEGER,
+                    MilkRate INTEGER,
+                    MilkFoamRate INTEGER,
+                    ChocolateRate INTEGER,
+                    Ice BOOLEAN
+        )""")            
+        cursor.execute("""INSERT INTO Coffees(CoffeeName,Price,CoffeeRate,WaterRate,MilkRate,MilkFoamRate,ChocolateRate,Ice) VALUES (?,?,?,?,?,?,?,?)""",
+                (self.coffeeName,self.price,self.coffeeRate,self.water,self.milk,self.milk_foam,self.chocolate,self.ice))
+        conn.commit()
+
+    # Return Coffee size and price for bill 
+    def cupSizeForPrice(self):
+        price = self.price
+        while True:
+            try:
+                size = int(input(f"""
+                Size For Cup                 
+                {"-"*28}                            
+                1- Tall (355ml)   : {self.price}
+                                            
+                2- Grande (473ml) : {self.price*1.15}
+                                                
+                3- Venti (591ml ) : {self.price*1.27}   
+                
+                Please choice for size : """))
+                if size == 1:
+                    print(price)
+                    return price
+                if size == 2:
+                    price *= 1.15
+                    print(price)
+                    return price
+                if size == 3:
+                    price *= 1.27
+                    return price
+            except:
+                print("\nInvalid size Please choice from table ")
+
+class Revenue(Coffee):
+    def __init__(self,coffeeName,price,revenue):
+
+        self.revenue = revenue
+        self.result = 0
+        super().__init__(coffeeName,price,revenue)
+    
+    # Customer is Pay the Bill
+    def isPaying(self):
+        beenpaid = input("Has money been paid (Y/N):")
+        if beenpaid.capitalize() == "Y":
+            print("""
+    Payment Successful
+    Returning to main menu...
+    """)
+            return True
+        if beenpaid.capitalize() == "N":
+            print("""Payment Failed
+    Returning to main menu... """)
+            return False
+        else: 
+            print("Please Select Y or N")
+
+
+
+    # function to print bill on display
+    def bill(self,result):
+        
+        VAT = 18
+        print("-"*50)
+        print(f"""
+                Your Bill:      
+                {result}     
+                without VAT(Value-Added Tax ) : 
+                {result/(1+VAT/100)}    
+                """)
+        print("-"*50)
+
+        if self.isPaying():
+            cursor.execute(f"""INSERT INTO Sales (CoffeePrice) VALUES ({result}) """ )
+            conn.commit()
+
+    # function that pulls prices from database and calculates total revenue 
+    def revenueCalcuate(self):
+        for data in Functions.datas():
+            self.revenue += data[2]
+
+        return self.revenue
+    
+    # Create table , Run CupSizeForPrice Function and return  
+    def Revenue(self):
+
+        cursor.execute("""CREATE TABLE IF NOT EXISTS Sales(
+                    ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                    CoffeeName TEXT,
+                    CoffeePrice INTEGER  
+    )""")
+        
+        self.result = self.cupSizeForPrice()
+        return self.result
+       
+    # Function to print Total End of Day Revenue to Display  
+    def totalRevenue(self):
+        print(f"""
+     _ _ _ _ _ _ _ _ _ _ _ _ _ 
+    |
+    | TOTAL : {self.revenueCalcuate()}
+    |_ _ _ _ _ _ _ _ _ _ _ _ _
+""")
+
+    # Delete Table for end of day        
+    def endDay():
+        cursor.execute("""DROP TABLE Sales""")
+        conn.commit()
+
+# Choice coffee for costumer
+def coffeeChoice():  
+    choiseCoffe = input("""
+      _ _ _ _ _ _ _ _ _ _
+    |                    |                   
+    | - 1 Americano      |
+    |                    |
+    | - 2 Ice            |
+    |     Americano      |
+    |                    |
+    | - 3 Latte          |
+    |                    |
+    | - 4 Ice            |
+    |     Latte          |
+    |                    |
+    | - 5 Espresso       |
+    |                    |
+    | - 6 Cappuccino     |
+    |                    |
+    | - 7 Mocha          |
+    | _ _ _ _ _ _ _ _ _ _|
+    Please choice a coffee : """)
+
+    if choiseCoffe == "1":
+        return americanoRevenue.Revenue()
+    if choiseCoffe == "2":
+        return iceAmericanoRevenue.Revenue()
+    if choiseCoffe == "3":
+        return latteRevenue.Revenue()
+    if choiseCoffe == "4":
+        return icelatteRevenue.Revenue()
+    if choiseCoffe == "5":
+        return espressoRevenue.Revenue()
+    if choiseCoffe == "6":
+        return cappucinoRevenue.Revenue()
+    if choiseCoffe == "7":
+        return mochaRevenue.Revenue()
+
+# Fetch data for Total Price
+def datas():
+    cursor.execute("SELECT * FROM  Sales")
+    datas = cursor.fetchall()
+    return datas
+
+
+
+# coffee identification for Ingredients  
+espresso = Coffee("Espresso",30,0.8)
+americano = Coffee("Americano",35,0.3,0.7)
+iceAmericano = Coffee("Ice Americano",40,0.3,0.7,ice=1) 
+latte = Coffee("Latte",45,0.2,0,0.6,0.2)       
+iceLatte = Coffee("Ice Latte",50,0.2,0,0.6,0.2,ice=1)
+cappucino = Coffee("Cappucino",42,0.2,0,0.2,0.6)   
 mocha = Coffee("Mocha",55,0.3,0,0.4,0.1,0.2) 
 
-#result for bill
-result = 0 
+
+
+# Coffe identification for Revenue (Total Price)
+revenue = 0
+espressoRevenue = Revenue(espresso.coffeeName,espresso.price,0)                          
+americanoRevenue = Revenue(americano.coffeeName,americano.price,0)                    
+latteRevenue = Revenue(latte.coffeeName,latte.price,0)                  
+iceAmericanoRevenue = Revenue(iceAmericano.coffeeName,iceAmericano.price,0)       
+icelatteRevenue = Revenue(iceLatte.coffeeName,iceLatte.price,0)              
+cappucinoRevenue = Revenue(cappucino.coffeeName,cappucino.price,0)              
+mochaRevenue = Revenue(mocha.coffeeName,mocha.price,0) 
+
+def firstMessage(result):
+    isContinue = True
+    result = 0 
+    if isContinue:
+        while True:
+
+            choice = input("""
+         _ _ _ _ _ _ _ _ _ _
+        |                    |                   
+        |    Welcome To My   |
+        |        Cafe        |
+        |                    |
+        | - 1 Ingredients    |
+        |       Coffees      |
+        |                    |                
+        | - 2 New Costumer   |
+        |                    |
+        | - 3 Close the      |
+        |       Vault        |
+        |                    |
+        | - 4 Quit           |
+        | _ _ _ _ _ _ _ _ _ _|
+                        
+        Please choice a menu : """)
+            
+            if choice == "1":
+                coffeeIngredients()
+            if choice == "2":
+                # try :
+                    howManyPeople = int(input("How many costumer : "))
+                    while howManyPeople > 0:
+                        result += coffeeChoice()
+                        print(result)
+                        howManyPeople -= 1
+                # except : 
+                #     print("Please insert a number")
+            if choice == "3":
+                Revenue("",0,0).bill(result)
+                result = 0 
+            if choice == "4":
+                Revenue("",0,0).totalRevenue()
+                Revenue.endDay()
+                isContinue = False
+                break
+
