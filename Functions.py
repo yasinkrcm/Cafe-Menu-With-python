@@ -7,6 +7,7 @@ cursor = conn.cursor()
 # coffee class identification (according to coffee ingredients)
 class Coffee(): 
     __doc__  = "This Class created for coffe type"
+    
     def __init__(self,coffeeName,price,coffeeRate,water=0,milk = 0,milkFoam = 0,chocolate = 0,ice = 0):
         self.coffeeName = coffeeName
         self.price = price
