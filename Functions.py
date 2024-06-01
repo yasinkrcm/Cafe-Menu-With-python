@@ -288,6 +288,7 @@ def firstMessage(result):
                 revenue.totalRevenue()
                 Revenue.endDay()
                 isContinue = False
+                conn.close()
                 break
             else:
                 print("\nPlease Choice number on the Menu")
