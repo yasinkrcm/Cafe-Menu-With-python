@@ -61,7 +61,6 @@ def coffeeChoice():
 def firstMessage(result):
     day = 0 
     isContinue = True
-    result = 0 
     if isContinue:
         while True:
 
@@ -86,14 +85,11 @@ def firstMessage(result):
         Please choice a menu : """)
             
             if choice == "1":
-                # from BaseStructure import coffeeIngredients
                 coffeeIngredients()
-
             elif choice == "2":
                 try :
                     howManyPeople = int(input("How many costumer : "))
                     while howManyPeople > 0:
-                        # from BaseStructure import coffeeChoice
                         result = coffeeChoice()
                         howManyPeople -= 1
                         revenue.bill(result)
@@ -109,6 +105,7 @@ def firstMessage(result):
             elif choice == "4":
                 getWeeklyRevenue()
                 isContinue = False
+                print("Program is closing...")
                 break
 
             else:

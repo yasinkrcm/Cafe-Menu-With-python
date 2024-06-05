@@ -1,5 +1,3 @@
-# database ve giriş menüsünü farklı modüle al , günsonu tablosuna tarih ekle eğer gün adedi 7yi geçerse silsin 
-# 3 - e bastığında kasayı kapat müşteri ismi istesin  farklı bir tabloya işlesin 
 from dataBaseConnection import *
 
 
@@ -21,7 +19,7 @@ class Coffee():
     def cupSizeForPrice(self):
         price = self.price
         while True:
-            # try:
+            try:
                 size = int(input(f"""
                 Size For Cup                 
                 {"-"*28}                            
@@ -40,9 +38,10 @@ class Coffee():
                 if size == 3:
                     price *= 1.27
                     return price
-            # except:
-            #     print("\nInvalid size Please choice from table ")
+            except:
+                print("\nInvalid size Please choice from table ")
 
+# price calculation for each coffee class
 class Revenue(Coffee):
     __doc__ = "This Class Created For End of day Revenue"
     
@@ -61,7 +60,6 @@ class Revenue(Coffee):
         Payment Successful
         Returning to main menu...""")
                 
-                self.costumerName = input("please enter  customer name: ")
                 return True
             if beenpaid.capitalize() == "N":
                 print("""
@@ -71,8 +69,6 @@ class Revenue(Coffee):
             else: 
                 print("\nPlease Select Y or N")
                 return self.isPaying()
-
-
 
     # function to print bill on display
     def bill(self,result):
@@ -113,7 +109,6 @@ class Revenue(Coffee):
         except:
             print("\nPlease Sale the Coffee")
 
-    
 
 # coffee identification for Ingredients  
 espresso = Coffee("Espresso",30,0.8)
