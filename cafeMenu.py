@@ -59,7 +59,7 @@ def coffeeChoice():
 
 # Main Menu And First Message
 def firstMessage(result):
-
+    day = 0 
     isContinue = True
     result = 0 
     if isContinue:
@@ -76,10 +76,11 @@ def firstMessage(result):
         |                    |                
         | - 2 New Costumer   |
         |                    |
-        | - 3 Close the      |
-        |       Vault        |
+        | - 3 Daily          |
+        |     Revenue        |
         |                    |
-        | - 4 Quit           |
+        | - 4 Weekly         |
+        |     Revenue        |
         | _ _ _ _ _ _ _ _ _ _|
                         
         Please choice a menu : """)
@@ -87,25 +88,29 @@ def firstMessage(result):
             if choice == "1":
                 # from BaseStructure import coffeeIngredients
                 coffeeIngredients()
+
             elif choice == "2":
                 try :
                     howManyPeople = int(input("How many costumer : "))
                     while howManyPeople > 0:
                         # from BaseStructure import coffeeChoice
-                        result += coffeeChoice()
+                        result = coffeeChoice()
                         howManyPeople -= 1
+                        revenue.bill(result)
                 except : 
                     print("Please insert a number")
-            
+
             elif choice == "3":
-                # from BaseStructure import revenue
-                revenue.bill(result)
-                result = 0 
+                day += 1 
+                if day > 7:
+                    print("Please Choice Weekly Revenue")
+                else:
+                    revenue.totalRevenue(day)
             elif choice == "4":
-                # from BaseStructure import Revenue , revenue
-                revenue.totalRevenue()
+                getWeeklyRevenue()
                 isContinue = False
                 break
+
             else:
                 print("\nPlease Choice number on the Menu")
 

@@ -1,8 +1,7 @@
 # database ve giriş menüsünü farklı modüle al , günsonu tablosuna tarih ekle eğer gün adedi 7yi geçerse silsin 
 # 3 - e bastığında kasayı kapat müşteri ismi istesin  farklı bir tabloya işlesin 
-
 from dataBaseConnection import *
-import datetime
+
 
 # coffee class identification (according to coffee ingredients)
 class Coffee(): 
@@ -77,7 +76,6 @@ class Revenue(Coffee):
 
     # function to print bill on display
     def bill(self,result):
-        conn
         VAT = 18
         print("-"*50)
         print(f"""
@@ -89,32 +87,33 @@ class Revenue(Coffee):
         print("-"*50)
 
         if self.isPaying():
-            insertSales(result)
-
-    # function that pulls prices from database and calculates total revenue 
-    def revenueCalcuate(self): 
-        # from cafeMenu import datas
-        for data in getDatas():
-            self.revenue += data[2]
-
-        return self.revenue
+            insertDaily(result)
     
     # Create table , Run CupSizeForPrice Function and return  
     def Revenue(self):
-        createSalesTable()
+        createTable()
         self.result = self.cupSizeForPrice()
         return self.result
        
     # Function to print Total End of Day Revenue to Display  
-    def totalRevenue(self):
-        print(f"""
-     _ _ _ _ _ _ _ _ _ _ _ _ _ 
-    |
-    | DAILY TOTAL : {self.revenueCalcuate()}
-    |_ _ _ _ _ _ _ _ _ _ _ _ _
-""")
-    dropSales()
+    def totalRevenue(self,day):
+        try :
+            dailyRevenue = 0 
+            datas = getDailyDatas()
+            for data in datas:
+                dailyRevenue += data[2]
+            print(f"""
+         _ _ _ _ _ _ _ _ _ _ _ _ _ 
+        |
+        | {day}. DAY TOTAL : {dailyRevenue}
+        |_ _ _ _ _ _ _ _ _ _ _ _ _
+                """)
+            insertDailyRevenue(datas,dailyRevenue,day)
+            dropDaily()
+        except:
+            print("\nPlease Sale the Coffee")
 
+    
 
 # coffee identification for Ingredients  
 espresso = Coffee("Espresso",30,0.8)
